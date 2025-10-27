@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MentorCh — AI Mentor (Prototype)</title>
   <style>
-    /* Simple modern minimal styling */
     :root{
       --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#7c3aed;
       --glass: rgba(255,255,255,0.03);
@@ -24,7 +23,6 @@
     .features{display:flex;gap:12px;flex-direction:column;margin-top:16px}
     .feature{background:var(--glass);padding:12px;border-radius:8px;color:var(--muted)}
     .cta{display:inline-block;margin-top:14px;padding:10px 14px;border-radius:8px;background:linear-gradient(90deg,#7c3aed,#3b82f6);text-decoration:none;color:white}
-    /* Chat area */
     .chat{height:520px;display:flex;flex-direction:column}
     .messages{flex:1;overflow:auto;padding:8px 6px;gap:10px;display:flex;flex-direction:column}
     .msg{max-width:86%;padding:10px;border-radius:10px}
@@ -44,7 +42,7 @@
         <div class="logo">M</div>
         <div>
           <h1>MentorCh — AI Mentor (Prototype)</h1>
-          <p class="lead">Simple interface to ask study, career or code questions. (Demo mode)</p>
+          <p class="lead">Ask study, career, or coding questions instantly!</p>
         </div>
       </div>
       <nav>
@@ -55,57 +53,36 @@
     <div class="grid">
       <div class="card hero">
         <h2>Welcome to MentorCh</h2>
-        <p class="lead">Yeh prototype site aapko dikhata hai kaise ek AI mentorship website lagegi. Abhi aap bina backend ke locally use kar sakte hain.</p>
+        <p class="lead">Your personal AI mentor for study, career, and coding advice.  
+        This demo connects directly to your Replit backend for real responses.</p>
         <div class="features">
-          <div class="feature">Fast prototype — HTML/CSS/JS only</div>
-          <div class="feature">Chat UI — simulated AI replies (for now)</div>
-          <div class="feature">Ready to connect to real AI API later</div>
+          <div class="feature">⚡ Live AI chat via Replit backend</div>
+          <div class="feature">💬 Clean minimal chat interface</div>
+          <div class="feature">🧠 Ready to expand into full mentor platform</div>
         </div>
         <a class="cta" href="#chat">Open Chat</a>
-        <hr style="margin:16px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
-        <h3>How to run (zero rupee, zero setup)</h3>
-        <ol style="color:var(--muted);font-size:14px">
-          <li>Is file ko `index.html` naam se save karo.</li>
-          <li>File par right-click → Open with → Browser (Chrome/Edge/Firefox).</li>
-          <li>Page khul jayega, "Start Chat" pe click karo aur chat try karo.</li>
-        </ol>
       </div>
 
       <div class="card" id="chat">
-        <h3>Chat with MentorCh (Demo)</h3>
+        <h3>Chat with MentorCh</h3>
         <div class="chat">
           <div class="messages" id="messages">
-            <div class="msg bot">Salaam! Main MentorCh (demo). Koi sawal pucho — study, career ya code.</div>
+            <div class="msg bot">👋 Salaam! Main MentorCh hoon — ask me anything (study, career, coding...)</div>
           </div>
-
           <div class="input-row">
-            <input id="userInput" placeholder="Type your question... e.g. 'How to learn web dev?'" />
+            <input id="userInput" placeholder="Type your question here..." />
             <button class="btn" id="sendBtn">Send</button>
-          </div>
-
-          <div style="margin-top:8px;color:var(--muted);font-size:13px">
-            <strong>Note:</strong> Yeh demo abhi fake replies deta hai. Neeche instructions di hain real AI connect karne ki.
           </div>
         </div>
       </div>
     </div>
 
     <footer>
-      <div>Built with ♥ — MentorCh prototype. To connect real AI later, see instructions below.</div>
-      <div style="margin-top:6px;color:var(--muted);font-size:13px;text-align:left;max-width:1000px">
-        <h4 style="margin:8px 0 6px">How to replace demo with real AI (short):</h4>
-        <ol style="color:var(--muted);font-size:13px">
-          <li>Sign up for a free account on an AI provider (OpenAI, Hugging Face) and get an API key.</li>
-          <li>Create a small backend (Node.js + Express) that stores the API key securely and forwards requests to the AI provider.</li>
-          <li>Change the `sendMessageToAI()` function below to call your backend endpoint (not directly the API from browser).</li>
-          <li>Deploy backend to free hosting (Render free, Vercel, Fly, Railway free tier) and frontend to GitHub Pages / Netlify / Vercel.</li>
-        </ol>
-      </div>
+      <div>Built with ❤️ by Jahanzaib — MentorCh Prototype (Frontend + Replit Backend).</div>
     </footer>
   </div>
 
 <script>
-  /* Simple simulated chatbot + placeholders for real API integration */
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('userInput');
   document.getElementById('sendBtn').addEventListener('click', send);
@@ -119,64 +96,6 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  async function send(){
-    const txt = inputEl.value.trim();
-    if(!txt) return;
-    append('user', txt);
-    inputEl.value = '';
-    append('bot', 'Thinking...');
-
-    // SIMULATED reply logic (for zero-cost demo)
-    await new Promise(r=>setTimeout(r, 700));
-    // remove the "Thinking..." message (last bot)
-    messagesEl.removeChild(messagesEl.lastChild);
-
-    //const reply = simulatedReply(txt);
-    //append('bot', reply);
-    const reply = await sendMessageToAI(txt);
-append('bot', reply);
-
-    // --- WHEN READY TO USE REAL AI ---
-    // Replace the above simulated part with:
-    // const reply = await sendMessageToAI(txt);
-    // append('bot', reply);
-  }
-
-  function simulatedReply(userText){
-    const t = userText.toLowerCase();
-    if(t.includes('learn') && t.includes('web')) return "Start with HTML → CSS → JavaScript. Make small projects: a personal page, a todo app. Use free tutorials on YouTube and freeCodeCamp.";
-    if(t.includes('job') || t.includes('career')) return "Build a portfolio, do 2-3 real projects, apply to remote freelancing platforms like Upwork/Fiverr. Prepare CV and LinkedIn profile.";
-    if(t.includes('price') || t.includes('cost')) return "MentorCh demo is free. Real services may cost depending on hosting/API usage.";
-    if(t.includes('how') && t.includes('run')) return "Save this file as index.html and open in browser. For advanced use, learn basics of Node.js for backend.";
-    // fallback: generic helpful reply
-    return "Mujhe yeh acha sawal laga — aapko step-by-step guide chahiye? Agar haan, batao kis topic pe (coding, admission, resume etc.)";
-  }
-
-async function sendMessageToAI(userText){
-  const resp = await fetch("https://mentorch-backend-muhammadjahan21.replit.app/chat", {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({message: userText})
-  });
-  const data = await resp.json();
-  return data.reply;
-}
-<script>
-  // --- MentorCh front-end chat script (connected to Replit backend) ---
-  const messagesEl = document.getElementById('messages');
-  const inputEl = document.getElementById('userInput');
-  document.getElementById('sendBtn').addEventListener('click', send);
-  inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter') send(); });
-
-  function append(role, text){
-    const d = document.createElement('div');
-    d.className = 'msg ' + (role==='user' ? 'user' : 'bot');
-    d.textContent = text;
-    messagesEl.appendChild(d);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
-  // <-- PUT YOUR REPLIT BACKEND URL HERE (with /chat at the end) -->
   const BACKEND_URL = "https://mentorch-backend-muhammadjahan21.replit.app/chat";
 
   async function send(){
@@ -188,41 +107,28 @@ async function sendMessageToAI(userText){
 
     try {
       const reply = await sendMessageToAI(txt);
-      // remove "Thinking..."
       if(messagesEl.lastChild && messagesEl.lastChild.textContent === 'Thinking...'){
         messagesEl.removeChild(messagesEl.lastChild);
       }
       append('bot', reply);
     } catch (err) {
-      console.error("Chat error:", err);
+      console.error(err);
       if(messagesEl.lastChild && messagesEl.lastChild.textContent === 'Thinking...'){
         messagesEl.removeChild(messagesEl.lastChild);
       }
-      append('bot', 'Server error: check console (F12).');
+      append('bot', '⚠️ Error connecting to server. Make sure Replit is running.');
     }
   }
 
   async function sendMessageToAI(userText){
-    // POST to your Replit backend
     const resp = await fetch(BACKEND_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ message: userText })
     });
-    if(!resp.ok){
-      const txt = await resp.text().catch(()=>null);
-      throw new Error('Bad response: ' + resp.status + ' ' + txt);
-    }
     const data = await resp.json();
-    // Expecting { reply: "..." }
-    return data.reply || "No reply from backend.";
+    return data.reply || "No reply received from backend.";
   }
 </script>
-
-
-
-  
 </body>
 </html>
-
-
