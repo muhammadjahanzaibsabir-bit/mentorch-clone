@@ -161,7 +161,68 @@ async function sendMessageToAI(userText){
   const data = await resp.json();
   return data.reply;
 }
+<script>
+  // --- MentorCh front-end chat script (connected to Replit backend) ---
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('userInput');
+  document.getElementById('sendBtn').addEventListener('click', send);
+  inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter') send(); });
+
+  function append(role, text){
+    const d = document.createElement('div');
+    d.className = 'msg ' + (role==='user' ? 'user' : 'bot');
+    d.textContent = text;
+    messagesEl.appendChild(d);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  // <-- PUT YOUR REPLIT BACKEND URL HERE (with /chat at the end) -->
+  const BACKEND_URL = "https://mentorch-backend-muhammadjahan21.replit.app/chat";
+
+  async function send(){
+    const txt = inputEl.value.trim();
+    if(!txt) return;
+    append('user', txt);
+    inputEl.value = '';
+    append('bot', 'Thinking...');
+
+    try {
+      const reply = await sendMessageToAI(txt);
+      // remove "Thinking..."
+      if(messagesEl.lastChild && messagesEl.lastChild.textContent === 'Thinking...'){
+        messagesEl.removeChild(messagesEl.lastChild);
+      }
+      append('bot', reply);
+    } catch (err) {
+      console.error("Chat error:", err);
+      if(messagesEl.lastChild && messagesEl.lastChild.textContent === 'Thinking...'){
+        messagesEl.removeChild(messagesEl.lastChild);
+      }
+      append('bot', 'Server error: check console (F12).');
+    }
+  }
+
+  async function sendMessageToAI(userText){
+    // POST to your Replit backend
+    const resp = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText })
+    });
+    if(!resp.ok){
+      const txt = await resp.text().catch(()=>null);
+      throw new Error('Bad response: ' + resp.status + ' ' + txt);
+    }
+    const data = await resp.json();
+    // Expecting { reply: "..." }
+    return data.reply || "No reply from backend.";
+  }
 </script>
+
+
+
+  
 </body>
 </html>
+
 
