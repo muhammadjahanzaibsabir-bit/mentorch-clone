@@ -131,8 +131,10 @@
     // remove the "Thinking..." message (last bot)
     messagesEl.removeChild(messagesEl.lastChild);
 
-    const reply = simulatedReply(txt);
-    append('bot', reply);
+    //const reply = simulatedReply(txt);
+    //append('bot', reply);
+    const reply = await sendMessageToAI(txt);
+append('bot', reply);
 
     // --- WHEN READY TO USE REAL AI ---
     // Replace the above simulated part with:
@@ -150,18 +152,16 @@
     return "Mujhe yeh acha sawal laga — aapko step-by-step guide chahiye? Agar haan, batao kis topic pe (coding, admission, resume etc.)";
   }
 
-  /* Placeholder: how to call your backend safely (do NOT put API keys in browser)
-  async function sendMessageToAI(userText){
-    // Example: send to your backend endpoint /api/ai
-    const resp = await fetch('/api/ai', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: userText})
-    });
-    const data = await resp.json();
-    return data.reply; // backend should return { reply: "..." }
-  }
-  */
+async function sendMessageToAI(userText){
+  const resp = await fetch("https://mentorch-backend-muhammadjahan21.replit.app/chat", {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({message: userText})
+  });
+  const data = await resp.json();
+  return data.reply;
+}
 </script>
 </body>
 </html>
+
